@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
-  "name": "FPL League Extension",
-  "version": "0.1",
+  "name": "FPL Mini League Team Viewer",
+  "version": "0.2",
   "content_scripts": [
     {
       "matches": [
@@ -11,9 +11,12 @@
     }
   ],
   "browser_action": {
-   "default_icon": "icon.png",
+   "default_icon": "football48.png",
    "default_popup": "popup.html"
   },
+  "icons": { "16": "football16.png",
+           "48": "football48.png",
+          "128": "football128.png" },
   "permissions": [
    "activeTab",
    "http://fantasy.premierleague.com/"

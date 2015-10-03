@@ -36,8 +36,12 @@ function loadTeams(baseUrls) {
 $(function () {
   console.log('hello');
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, function(response) {
-      loadTeams(response);
-    });
+    if(tabs[0].url.match(/http:\/\/fantasy.premierleague.com\/my-leagues\/.*\/standings/)) {
+      chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, function(response) {
+        loadTeams(response);
+      });
+    } else {
+        $('#loader').html("Open this extension from your FPL League standings page.");
+    }
   });
 });
