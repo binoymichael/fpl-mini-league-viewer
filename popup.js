@@ -34,14 +34,15 @@ function loadTeams(baseUrls) {
 }
 
 $(function () {
-  console.log('hello');
-  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    if(tabs[0].url.match(/http:\/\/fantasy.premierleague.com\/my-leagues\/.*\/standings/)) {
-      chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, function(response) {
-        loadTeams(response);
-      });
-    } else {
-        $('#loader').html("Open this extension from your FPL League standings page.");
-    }
-  });
+  chrome.tabs.create({active: true, type: "popup", url: "http://google.co.in"});
+  // console.log('hello');
+  // chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+  //   if(tabs[0].url.match(/http:\/\/fantasy.premierleague.com\/my-leagues\/.*\/standings/)) {
+  //     chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, function(response) {
+  //       loadTeams(response);
+  //     });
+  //   } else {
+  //       $('#loader').html("Open this extension from your FPL League standings page.");
+  //   }
+  // });
 });
