@@ -13,10 +13,12 @@ function loadTeams(baseUrls) {
         var $div = $('<div></div>');
 
         var $teamName = $html.find('.ismTabHead');
+        var $gameweekPoints = $($html.find('.ism-team-scoreboard__section')[0]);
         var $team = $html.find('#ismPitchView');
 
         var $section1 = $('<section id="ismsection" class="ismPrimaryNarrow"></section>');
         $section1.html($teamName);
+        $section1.append($gameweekPoints);
         $section1.append($team);
 
         var $cup = $html.find('.ismModHead:contains("Transfers & Finance")');
