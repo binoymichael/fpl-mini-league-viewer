@@ -5,14 +5,17 @@
   "content_scripts": [
     {
       "matches": [
-          "http://fantasy.premierleague.com/my-leagues/*/standings/"
+          "https://www.google.co.in/"
         ],
       "js": ["jquery-2.1.4.min.js", "content.js"]
     }
   ],
-  "browser_action": {
-   "default_icon": "football48.png",
-   "default_popup": "popup.html"
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "page_action": {
+    "default_icon": "football48.png"
   },
   "icons": { "16": "football16.png",
            "48": "football48.png",

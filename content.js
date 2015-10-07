@@ -1,3 +1,10 @@
+console.log('hello from content script');
+chrome.runtime.sendMessage({greeting: "hello"}, function(response) {
+  console.log(response.farewell);
+});
+
+
+
 // content.js
 // alert("Hello from your Chrome extension!");
 // chrome.windows.create({url : "popup.html"});
