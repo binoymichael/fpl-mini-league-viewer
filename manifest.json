@@ -4,9 +4,8 @@
   "version": "0.2",
   "content_scripts": [
     {
-      "matches": [
-          "https://www.google.co.in/"
-        ],
+      "matches": ["http://fantasy.premierleague.com/my-leagues/*/standings/"],
+      "css": ["content.css"],
       "js": ["jquery-2.1.4.min.js", "content.js"]
     }
   ],

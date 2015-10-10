@@ -22,4 +22,11 @@ Mouseover view of team
 inspiratoin from Expanded list view
 Popup, Inline, New tab
 
+Heavy traffic? What happens?
 Options page
+
+
+
+#Questions
+- JS closure options
+- Passing a div as a parameter
