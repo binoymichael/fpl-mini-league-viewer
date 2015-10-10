@@ -42,6 +42,10 @@ var loadTeamIntoDiv = function(teamId, fullLink) {
       var $html = $(data);
       var $teamName = $html.find('.ismTabHead');
       var $gameweekPoints = $($html.find('.ism-team-scoreboard__section')[0]);
+      var points = $gameweekPoints.find('.ism-scoreboard-panel__points').text().match(/\d+/)[0];
+
+
+
       var $team = $html.find('#ismPitchView');
 
       var $section1 = $('<div class="miniLeagueTeam"></div>');
@@ -56,6 +60,7 @@ var loadTeamIntoDiv = function(teamId, fullLink) {
       var $section3 = $('<div id="mlth' + teamId + '" class="miniLeagueTransferHistory"></div>')
 
       var $div = $('#ml' + teamId);
+      $div.attr('data-gwpoints', points);
       $div.append($section1);
       $div.append($section2);
       $div.append($section3);
@@ -66,21 +71,40 @@ var loadTeamIntoDiv = function(teamId, fullLink) {
 
 };
 
+var posSort = function() {
+  var $wrapper = $('.miniLeagueSection');
+
+  $wrapper.find('.mlTeamContainer').sort(function (a, b) {
+      return +a.dataset.position - +b.dataset.position;
+  })
+  .appendTo( $wrapper );
+};
+
+var gwSort = function() {
+  var $wrapper = $('.miniLeagueSection');
+
+  $wrapper.find('.mlTeamContainer').sort(function (a, b) {
+      return +b.dataset.gwpoints - +a.dataset.gwpoints;
+  })
+  .appendTo( $wrapper );
+};
+
 // TODO: pagination
 var manipulateClassicDom = function() {
   console.log("classic dom");
   var clslinks = $('.ismStandingsTable tr td:nth-child(3) a');
   var standingsTableDiv = $('#ism');
   var miniLeagueSection = $('<section class="miniLeagueSection"></section>');
+  var $spacerdiv = $('<div class="miniLeagueSpacer"><h3>Mini League View</h3><a id="posSortButton">Sort on Current Standings</a> | <a id="gwSortButton">Sort on Gameweek Points</a></div>');
+  standingsTableDiv.append($spacerdiv);
+  $('#posSortButton').click(posSort);
+  $('#gwSortButton').click(gwSort);
   standingsTableDiv.append(miniLeagueSection);
-  var $spacerdiv = $('<div style="height:40px"></div>');
-  miniLeagueSection.append($spacerdiv);
 
-  // var value = clslinks[0];
   $.each(clslinks, function(index, value) {
     var clsLink = $(value).attr('href');
     var teamId = clsLink.match(/\d+/)[0];
-    var $div = $('<div class="mlTeamContainer" id="ml' + teamId + '"></div>');
+    var $div = $('<div class="mlTeamContainer" id="ml' + teamId + '" data-position="'+ index + '"></div>');
 
     loadTeamIntoDiv(teamId, rootUrl + clsLink);
     miniLeagueSection.append($div);

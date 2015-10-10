@@ -8,6 +8,14 @@
     padding-left: 30px;
 }
 
+#ism .miniLeagueSpacer {
+    float: left;
+    width: 720px;
+    padding-left: 30px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
 .mlTeamContainer {
   /*margin: auto;*/
   float: left;
