@@ -1,16 +1,20 @@
 Inside the block
-  - Fix transfer list link
-  - Include transfer list view
-  - Current Gameweek points
+  <!-- - Fix transfer list link -->
+  <!-- - Include transfer list view -->
+  <!-- - Current Gameweek points -->
+  <!-- Added overall points in the box -->
 
 Order
-- Ranking order
+<!-- - Ranking order -->
+<!-- - Gameweek order -->
 - H2H view
 - select which teams to display
 
-More teams
+<!-- More teams
   - test with more than 50 teams
   - Next page to take to the next level
+ -->
+
 
 Stats Page
   - a stats page with collated information
@@ -22,8 +26,11 @@ Mouseover view of team
 inspiratoin from Expanded list view
 Popup, Inline, New tab
 
-Heavy traffic? What happens?
-Options page
+- Heavy traffic? What happens?
+- Resolution testing
+
+- Options page
+ - load minileague viewer by default or only on page click
 
 
 

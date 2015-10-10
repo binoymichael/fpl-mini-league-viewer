@@ -20,13 +20,15 @@ var loadPreviousTransfers = function(teamId) {
 
       var $html = $(data);
 
-      $t = $($html.find('table.ismTable')[0]);
-      $t.find('th:first').remove();
-      $t.find('td:first-child').remove();
-      $t.find('tr').slice(5,-1).remove()
-
       var $div = $('#mlth' + teamId);
-      $div.append($t);
+      $t = $($html.find('table.ismTable')[0]);
+      if ($t.find('th:first').text() == 'Date') {
+        $t.find('th:first').remove();
+        $t.find('td:first-child').remove();
+        $t.find('tr').slice(6).remove()
+
+        $div.append($t);
+      }
     }
   });
 }
@@ -53,6 +55,12 @@ var loadTeamIntoDiv = function(teamId, fullLink) {
       $section1.append($gameweekPoints);
       $section1.append($team);
 
+      var $overallpoints = $html.find('.ismModHead:contains("Points/Rankings")');
+      var $overallpointsContainer = $overallpoints.parent();
+      $overallpointsContainer.find('dd,dt').slice(4).remove();
+      var $section4 = $('<div class="miniLeagueFinance"></div>');
+      $section4.html($overallpointsContainer);
+
       var $cup = $html.find('.ismModHead:contains("Transfers & Finance")');
       var $section2 = $('<div class="miniLeagueFinance"></div>');
       $section2.html($cup.parent());
@@ -63,6 +71,7 @@ var loadTeamIntoDiv = function(teamId, fullLink) {
       $div.attr('data-gwpoints', points);
       $div.append($section1);
       $div.append($section2);
+      $div.append($section4);
       $div.append($section3);
 
       loadPreviousTransfers(teamId);
