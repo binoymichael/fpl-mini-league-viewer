@@ -11,6 +11,26 @@ var manipulateH2hDom = function() {
   // add extra info
 };
 
+var loadPreviousTransfers = function(teamId) {
+  $.ajax({
+    url: rootUrl + "/entry/" + teamId + "/transfers/history/",
+    type: "get",
+    dataType: "",
+    success: function(data) {
+
+      var $html = $(data);
+
+      $t = $($html.find('table.ismTable')[0]);
+      $t.find('th:first').remove();
+      $t.find('td:first-child').remove();
+      $t.find('tr').slice(5,-1).remove()
+
+      var $div = $('#mlth' + teamId);
+      $div.append($t);
+    }
+  });
+}
+
 
 var loadTeamIntoDiv = function(teamId, fullLink) {
   $.ajax({
@@ -24,30 +44,23 @@ var loadTeamIntoDiv = function(teamId, fullLink) {
       var $gameweekPoints = $($html.find('.ism-team-scoreboard__section')[0]);
       var $team = $html.find('#ismPitchView');
 
-      var $section1 = $('<section id="ismsection" class="ismPrimaryNarrow ismSB"></section>');
+      var $section1 = $('<div class="miniLeagueTeam"></div>');
       $section1.html($teamName);
       $section1.append($gameweekPoints);
       $section1.append($team);
 
-      var $div = $('#' + teamId);
+      var $cup = $html.find('.ismModHead:contains("Transfers & Finance")');
+      var $section2 = $('<div class="miniLeagueFinance"></div>');
+      $section2.html($cup.parent());
+
+      var $section3 = $('<div id="mlth' + teamId + '" class="miniLeagueTransferHistory"></div>')
+
+      var $div = $('#ml' + teamId);
       $div.append($section1);
+      $div.append($section2);
+      $div.append($section3);
 
-      // var $div = $('<div></div>');
-
-
-      // var $section1 = $('<section id="ismsection" class="ismPrimaryNarrow"></section>');
-      // $section1.html($teamName);
-      // $section1.append($team);
-
-      // var $cup = $html.find('.ismModHead:contains("Transfers & Finance")');
-      // var $section2 = $('<section id="finance" style="width:227px; float:right;"></section>');
-      // $section2.html($cup.parent());
-
-      // $div.append($section1);
-      // $div.append($section2);
-
-      // $('#ism').append($div);
-      
+      loadPreviousTransfers(teamId);
     }
   });
 
@@ -57,14 +70,20 @@ var loadTeamIntoDiv = function(teamId, fullLink) {
 var manipulateClassicDom = function() {
   console.log("classic dom");
   var clslinks = $('.ismStandingsTable tr td:nth-child(3) a');
-  var standingsTableSection = $('section.ismPrimaryWide');
+  var standingsTableDiv = $('#ism');
+  var miniLeagueSection = $('<section class="miniLeagueSection"></section>');
+  standingsTableDiv.append(miniLeagueSection);
+  var $spacerdiv = $('<div style="height:40px"></div>');
+  miniLeagueSection.append($spacerdiv);
+
+  // var value = clslinks[0];
   $.each(clslinks, function(index, value) {
     var clsLink = $(value).attr('href');
     var teamId = clsLink.match(/\d+/)[0];
-    var $div = $('<div id="' + teamId + '"></div>');
+    var $div = $('<div class="mlTeamContainer" id="ml' + teamId + '"></div>');
 
     loadTeamIntoDiv(teamId, rootUrl + clsLink);
-    standingsTableSection.append($div);
+    miniLeagueSection.append($div);
   });
 };
 

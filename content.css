@@ -1,3 +1,29 @@
 #ism .ism-team-scoreboard__section {
     padding: 0 0px !important;
 }
+
+#ism .miniLeagueSection {
+    float: left;
+    width: 720px;
+    padding-left: 30px;
+}
+
+.mlTeamContainer {
+  /*margin: auto;*/
+  float: left;
+}
+
+.miniLeagueTeam {
+  float: left;
+  width: 490px;
+  background: #e6e6e6;
+}
+
+.miniLeagueFinance {
+  margin-left: 500px;
+  width: 230px;
+}
+.miniLeagueTransferHistory {
+  margin-left: 500px;
+  width: 330px;
+}
