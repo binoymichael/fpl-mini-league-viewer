@@ -2,13 +2,45 @@ console.log('hello from content script');
 var mode = "";
 var rootUrl = "http://fantasy.premierleague.com";
 
+var toggleH2HClassicView = function(e) {
+  e.preventDefault();
+  var $this = $(this);
+  if ($this.text() == 'Show') {
+    $this.text('Hide');
+  } else {
+    $this.text('Show');
+  }
+  $('#mlSortControls').toggle();
+  $('.miniLeagueSectionH2H').toggle();
+};
 
 var manipulateH2hDom = function() {
-  // include links near table headers
-  // add the teams
-  // load them one by one. 
-  // add retry logic to team fetch script to handle heavy traffic situations
-  // add extra info
+  console.log("h2h dom");
+  var clslinks = $('.ismH2HStandingsTable tr td:nth-child(3) a');
+  var standingsTableDiv = $('.ismH2HStandingsTable');
+
+  var miniLeagueSection = $('<section class="miniLeagueSectionH2H"></section>');
+
+  var $spacerdiv = $('<div class="miniLeagueSpacerH2H"><h3 style="display: inline;"><img src="' + chrome.extension.getURL("football16.png") + '"/>  Classic View</h3> | <a id="toggleH2HClassicView" href="#">Show</a> <div id="mlSortControls" style="margin-top:30px"><a id="posSortButton" href="#">Sort on Current Standings</a> | <a id="gwSortButton" href="#">Sort on Gameweek Points</a></div></div>');
+
+  standingsTableDiv.after($spacerdiv);
+
+  $('#toggleH2HClassicView').click(toggleH2HClassicView);
+  $('#posSortButton').click(posSortH2H);
+  $('#gwSortButton').click(gwSortH2H);
+  $('#mlSortControls').hide();
+
+  $spacerdiv.after(miniLeagueSection);
+
+  $.each(clslinks, function(index, value) {
+    var clsLink = $(value).attr('href');
+    var teamId = clsLink.match(/\d+/)[0];
+    var $div = $('<div class="mlTeamContainerH2H" id="ml' + teamId + '" data-position="'+ index + '"></div>');
+
+    loadTeamIntoDiv("H2H", teamId, rootUrl + clsLink);
+    miniLeagueSection.append($div);
+    miniLeagueSection.hide();
+  });
 };
 
 var loadPreviousTransfers = function(teamId) {
@@ -34,7 +66,7 @@ var loadPreviousTransfers = function(teamId) {
 }
 
 
-var loadTeamIntoDiv = function(teamId, fullLink) {
+var loadTeamIntoDiv = function(mode, teamId, fullLink) {
   $.ajax({
     url: fullLink,
     type: "get",
@@ -80,7 +112,30 @@ var loadTeamIntoDiv = function(teamId, fullLink) {
 
 };
 
-var posSort = function() {
+// Refactor
+var posSortH2H = function(e) {
+  e.preventDefault();
+  var $wrapper = $('.miniLeagueSectionH2H');
+
+  $wrapper.find('.mlTeamContainerH2H').sort(function (a, b) {
+      return +a.dataset.position - +b.dataset.position;
+  })
+  .appendTo( $wrapper );
+};
+
+// Refactor
+var gwSortH2H = function(e) {
+  e.preventDefault();
+  var $wrapper = $('.miniLeagueSectionH2H');
+
+  $wrapper.find('.mlTeamContainerH2H').sort(function (a, b) {
+      return +b.dataset.gwpoints - +a.dataset.gwpoints;
+  })
+  .appendTo( $wrapper );
+};
+
+var posSort = function(e) {
+  e.preventDefault();
   var $wrapper = $('.miniLeagueSection');
 
   $wrapper.find('.mlTeamContainer').sort(function (a, b) {
@@ -89,7 +144,8 @@ var posSort = function() {
   .appendTo( $wrapper );
 };
 
-var gwSort = function() {
+var gwSort = function(e) {
+  e.preventDefault();
   var $wrapper = $('.miniLeagueSection');
 
   $wrapper.find('.mlTeamContainer').sort(function (a, b) {
@@ -115,7 +171,7 @@ var manipulateClassicDom = function() {
     var teamId = clsLink.match(/\d+/)[0];
     var $div = $('<div class="mlTeamContainer" id="ml' + teamId + '" data-position="'+ index + '"></div>');
 
-    loadTeamIntoDiv(teamId, rootUrl + clsLink);
+    loadTeamIntoDiv("CLS", teamId, rootUrl + clsLink);
     miniLeagueSection.append($div);
   });
 };
