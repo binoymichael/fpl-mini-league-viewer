@@ -22,5 +22,8 @@
   "permissions": [
    "activeTab",
    "http://fantasy.premierleague.com/"
+   ],
+   "web_accessible_resources": [
+    "football16.png"
    ]
 }

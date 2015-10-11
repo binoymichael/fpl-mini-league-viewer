@@ -104,7 +104,7 @@ var manipulateClassicDom = function() {
   var clslinks = $('.ismStandingsTable tr td:nth-child(3) a');
   var standingsTableDiv = $('#ism');
   var miniLeagueSection = $('<section class="miniLeagueSection"></section>');
-  var $spacerdiv = $('<div class="miniLeagueSpacer"><h3>Mini League View</h3><a id="posSortButton">Sort on Current Standings</a> | <a id="gwSortButton">Sort on Gameweek Points</a></div>');
+  var $spacerdiv = $('<div class="miniLeagueSpacer"><h1><img src="' + chrome.extension.getURL("football16.png") + '"/>  Mini League Detailed View</h1><a id="posSortButton" href="#">Sort on Current Standings</a> | <a id="gwSortButton" href="#">Sort on Gameweek Points</a></div>');
   standingsTableDiv.append($spacerdiv);
   $('#posSortButton').click(posSort);
   $('#gwSortButton').click(gwSort);
