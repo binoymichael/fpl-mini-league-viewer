@@ -32,15 +32,40 @@ var manipulateH2hDom = function() {
 
   $spacerdiv.after(miniLeagueSection);
 
+  $thisGwH2HTable = $('table.ismTable.ismH2HFixTable:first');
+  $thisGwH2HMiniLeagueTable = $('<table id="thisGwH2HMiniLeague"></table>');
+
+  $.each($thisGwH2HTable.find('tr'), function(index, matchRow) {
+    var homeTeamId = $(matchRow).find('a:first').attr('href').match(/\d+/)[0];
+    var awayTeamId = $(matchRow).find('a:last').attr('href').match(/\d+/)[0];
+    $matchTr = $('<tr><td id="ml-h2h-tgw-'+ homeTeamId +'"></td>' + 
+      '<td><table><tr id="h2hmid-' + homeTeamId + '"></tr><tr id="h2hmid-' + awayTeamId + '"></tr></table></td>' +
+      '<td id="ml-h2h-tgw-' + awayTeamId + '"></td></tr>')
+    $thisGwH2HMiniLeagueTable.append($matchTr);
+    // console.log(matchRow);
+  });
+  $thisGwH2HTable.after($thisGwH2HMiniLeagueTable);
+
+
+
+
+  $nextGwH2HTable = $('table.ismTable.ismH2HFixTable:last');
+  $nextGwH2HMiniLeagueTable = $('<table id="nextGwH2HMiniLeague"></table>');
+  $nextGwH2HTable.after($nextGwH2HMiniLeagueTable);
+
+
+
+
   $.each(clslinks, function(index, value) {
     var clsLink = $(value).attr('href');
     var teamId = clsLink.match(/\d+/)[0];
     var $div = $('<div class="mlTeamContainerH2H" id="ml' + teamId + '" data-position="'+ index + '"></div>');
+    miniLeagueSection.append($div);
 
     loadTeamIntoDiv("H2H", teamId, rootUrl + clsLink);
-    miniLeagueSection.append($div);
-    miniLeagueSection.hide();
   });
+
+  miniLeagueSection.hide();
 };
 
 var loadPreviousTransfers = function(teamId) {
@@ -101,12 +126,34 @@ var loadTeamIntoDiv = function(mode, teamId, fullLink) {
 
       var $div = $('#ml' + teamId);
       $div.attr('data-gwpoints', points);
-      $div.append($section1);
-      $div.append($section2);
-      $div.append($section4);
-      $div.append($section3);
-
+      $div.append($section1.clone());
+      $div.append($section2.clone());
+      $div.append($section4.clone());
+      $div.append($section3.clone());
       loadPreviousTransfers(teamId);
+
+      if (mode == "H2H") {
+        var $div2 = $('<div></div>');
+        $div2.append($section1.clone());
+
+        var $h2hsection4 = $('<div class="miniLeagueFinanceH2H"></div>');
+        $h2hsection4.html($overallpointsContainer);
+
+        var $h2hsection2 = $('<div class="miniLeagueFinanceH2H"></div>');
+        $h2hsection2.html($cup.parent());
+
+        // var $section3 = $('<div id="mlth' + teamId + '" class="miniLeagueTransferHistory"></div>')
+
+        var $teamTd = $('#ml-h2h-tgw-' + teamId);
+        var $midRow = $('#h2hmid-' + teamId);
+
+        $teamTd.append($div2);
+        $midRow.append($h2hsection2.clone());
+        $midRow.append($h2hsection4.clone());
+        // $midRow.append($section3.clone());
+      }
+
+
     }
   });
 
