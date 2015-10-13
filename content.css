@@ -53,9 +53,30 @@
 
 .miniLeagueFinanceH2H {
   margin-left: 20px;
+  margin-right: 20px;
   width: 230px;
 }
+
 .miniLeagueTransferHistory {
   margin-left: 500px;
   width: 230px;
+}
+
+.miniLeagueTransferHistoryH2H {
+  margin-left: 20px;
+  margin-right: 20px;
+  width: 230px;
+}
+
+.mlh2h h3 {
+  font-size: 1.3em !important;
+  color: #000 !important;
+}
+
+.mlh2h-team-box {
+  vertical-align: middle !important;
+}
+
+.mlh2h-team-row {
+  border-bottom: 1pt solid black;
 }
