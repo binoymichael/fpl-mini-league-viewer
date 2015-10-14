@@ -1,18 +1,20 @@
 {
   "manifest_version": 2,
   "name": "FPL Mini League Team Viewer",
-  "version": "0.3",
+  "version": "0.4",
   "content_scripts": [
     {
-      "matches": [
-          "http://fantasy.premierleague.com/my-leagues/*/standings/"
-        ],
+      "matches": ["http://fantasy.premierleague.com/my-leagues/*/standings/*"],
+      "css": ["content.css"],
       "js": ["jquery-2.1.4.min.js", "content.js"]
     }
   ],
-  "browser_action": {
-   "default_icon": "football48.png",
-   "default_popup": "popup.html"
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "page_action": {
+    "default_icon": "football48.png"
   },
   "icons": { "16": "football16.png",
            "48": "football48.png",
@@ -20,5 +22,9 @@
   "permissions": [
    "activeTab",
    "http://fantasy.premierleague.com/"
+   ],
+   "options_page": "options.html",
+   "web_accessible_resources": [
+    "football16.png"
    ]
 }

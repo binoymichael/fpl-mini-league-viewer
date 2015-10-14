@@ -1,0 +1,115 @@
+#ism .ism-team-scoreboard__section {
+    padding: 0 0px !important;
+}
+
+#ism .miniLeagueSection {
+    float: left;
+    width: 720px;
+    padding-left: 30px;
+}
+
+#ism .miniLeagueSectionH2H {
+    /*float: left;*/
+    width: 720px;
+    /*padding-left: 30px;*/
+}
+
+#ism .miniLeagueSpacer {
+    float: left;
+    width: 720px;
+    padding-left: 30px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+#ism .miniLeagueSpacerH2H {
+    width: 720px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.mlTeamContainer {
+  /*margin: auto;*/
+  float: left;
+}
+
+.mlTeamContainerH2H {
+  clear: both;
+  /*margin: auto;*/
+  /*float: left;*/
+}
+
+.miniLeagueTeam {
+  float: left;
+  width: 490px;
+  background: #e6e6e6;
+}
+
+
+.miniLeagueFinance {
+  margin-left: 500px;
+  width: 230px;
+}
+
+.miniLeagueFinanceH2H {
+  margin-left: 20px;
+  margin-right: 20px;
+  width: 230px;
+}
+
+.miniLeagueTransferHistory {
+  margin-left: 500px;
+  width: 230px;
+}
+
+.miniLeagueTransferHistory .ismCol1, .miniLeagueTransferHistory .ismCol2 {
+  width: 40% !important;
+}
+
+.miniLeagueTransferHistoryH2H {
+  margin-left: 20px;
+  margin-right: 20px;
+  width: 230px;
+}
+
+.mlh2h h3 {
+  font-size: 1.3em !important;
+  color: #000 !important;
+}
+
+.mlh2h-team-box {
+  vertical-align: middle !important;
+}
+
+.mlh2h-team-row {
+  border-bottom: 1pt solid black;
+}
+
+.mlPopTeam {
+    display: none;
+    position: absolute;
+    z-index: 99999;
+    width: 750px;
+    padding: 10px;
+    background: #FFFFFF;
+    color: #000000;
+    border: 1px solid #4D4F53;
+    margin: 0px;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(164, 164, 164, 1);
+    box-shadow: 0px 0px 5px 0px rgba(164, 164, 164, 1);
+}
+
+.mlPopTeamH2H {
+    display: none;
+    position: absolute;
+    z-index: 99999;
+    width: 750px;
+    padding: 10px;
+    background: #FFFFFF;
+    color: #000000;
+    border: 1px solid #4D4F53;
+    margin: 0px;
+    margin-left: -700px;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(164, 164, 164, 1);
+    box-shadow: 0px 0px 5px 0px rgba(164, 164, 164, 1);
+}
