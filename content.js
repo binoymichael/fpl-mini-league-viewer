@@ -149,9 +149,14 @@ var manipulateH2hDom = function() {
   $.each(clslinks, function(index, value) {
     var clsLink = $(value).attr('href');
     var teamId = clsLink.match(/\d+/)[0];
-    var $div = $('<div class="mlTeamContainerH2H" id="ml' + teamId + '" data-position="'+ index + '"></div>');
-    miniLeagueSection.append($div);
+    $(value).attr('data-popupbox', 'mlcp' + teamId);
+    $(value).hover(popupShow, popupHide);
 
+    var $div = $('<div class="mlTeamContainerH2H" id="ml' + teamId + '" data-position="'+ index + '"></div>');
+    var $pop = $('<div class="mlPopTeam" id="mlcp' + teamId + '"></div>');
+    $(value).parent().append($pop);
+
+    miniLeagueSection.append($div);
     loadTeamIntoDiv("H2H", teamId, rootUrl + clsLink);
   });
 
@@ -317,9 +322,6 @@ var manipulateClassicDom = function() {
   console.log("classic dom");
   var clslinks = $('.ismStandingsTable tr td:nth-child(3) a');
   var standingsTableDiv = $('#ism');
-  // var standingsTableTable = $('.ismStandingsTable');
-  // var classicPopoverContainer = $('<div id="#classicPopoverContainer"></div>');
-  // standingsTableTable.before(classicPopoverContainer);
 
   var miniLeagueSection = $('<section class="miniLeagueSection"></section>');
 
@@ -330,7 +332,6 @@ var manipulateClassicDom = function() {
   $('#toggleClassicView').click(toggleClassicView);
   $('#posSortButton').click(posSort);
   $('#gwSortButton').click(gwSort);
-  // $('#mlSortControls').hide();
   standingsTableDiv.append(miniLeagueSection);
 
   $.each(clslinks, function(index, value) {
