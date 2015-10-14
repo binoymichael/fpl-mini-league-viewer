@@ -2,14 +2,14 @@ console.log('hello from content script');
 var mode = "";
 var rootUrl = "http://fantasy.premierleague.com";
 
+var stats = {};
+
 var popupShow = function (e) {
-    console.log('popup');
     var target = '#' + ($(this).attr('data-popupbox'));
     $(target).show();
 };
 
 var popupHide = function () {
-    console.log('popdown');
     var target = '#' + ($(this).attr('data-popupbox'));
     if (!($(this).hasClass("show"))) {
         $(target).hide();
@@ -238,6 +238,8 @@ var loadTeamIntoDiv = function(mode, teamId, fullLink) {
 
 
       var $team = $html.find('#ismPitchView');
+      var captain = $team.find('.ismCaptainOn').closest('.ismPlayerContainer').find('dt').text();
+      var viceCaptain = $team.find('.ismViceCaptainOn').closest('.ismPlayerContainer').find('dt').text();
 
       var $section1 = $('<div class="miniLeagueTeam"></div>');
       $section1.html($teamName);
@@ -284,6 +286,7 @@ var loadTeamIntoDiv = function(mode, teamId, fullLink) {
         var $h2hPopSection3 = $('<div id="mlth-h2h-tgw-pop' + teamId + '" class="miniLeagueTransferHistoryH2H"></div>')
 
         var $nextH2hsection3 = $('<div id="mlth-h2h-ngw-' + teamId + '" class="miniLeagueTransferHistoryH2H"></div>')
+        var $nextH2hPopSection3 = $('<div id="mlth-h2h-ngw-pop' + teamId + '" class="miniLeagueTransferHistoryH2H"></div>')
 
         var $teamTd = $('#ml-h2h-tgw-' + teamId);
         var $teamTdPop = $('#ml-h2h-tgw-pop' + teamId);
@@ -308,7 +311,7 @@ var loadTeamIntoDiv = function(mode, teamId, fullLink) {
 
         $midRowPop.append($h2hsection2.clone());
         $midRowPop.append($h2hsection4.clone());
-        $midRowPop.append($h2hsection3.clone());
+        $midRowPop.append($h2hPopSection3.clone());
 
         $nextMidRow.append($h2hsection2.clone());
         $nextMidRow.append($h2hsection4.clone());
@@ -316,7 +319,7 @@ var loadTeamIntoDiv = function(mode, teamId, fullLink) {
 
         $nextMidRowPop.append($h2hsection2.clone());
         $nextMidRowPop.append($h2hsection4.clone());
-        $nextMidRowPop.append($nextH2hsection3.clone());
+        $nextMidRowPop.append($nextH2hPopSection3.clone());
        }
 
       loadPreviousTransfers(teamId);
@@ -369,8 +372,7 @@ var gwSort = function(e) {
 
 // TODO: pagination
 var manipulateClassicDom = function() {
-  console.log("classic dom");
-  $('.ismWrapper').css("min-height", "800px");
+  $('.ismWrapper').css("min-height", "1300px");
   var clslinks = $('.ismStandingsTable tr td:nth-child(3) a');
   var standingsTableDiv = $('#ism');
 
