@@ -7,6 +7,7 @@ var showInlineTable = function(mode) {
 
 }
 
+var mode;
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     console.log('hello from background');
@@ -15,8 +16,15 @@ chrome.runtime.onMessage.addListener(
                 "from the extension");
     if (request.action == "hello") {
       chrome.pageAction.show(sender.tab.id);
-      // if inlinemode
-      showInlineTable(request.mode);
+      mode = request.mode;
+
+      if (localStorage["default-setting"] == "true") {
+        showInlineTable(request.mode);
+      }
     }
   }
 );
+
+chrome.pageAction.onClicked.addListener(function(tab) {
+  showInlineTable(mode);
+});

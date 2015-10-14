@@ -35,6 +35,8 @@ Mouse popover for teams and h2h
   - add in h2h classic
   - add for h2h matches
 
+Options Page
+
 Stats Page
   - Selected captains
   - Run thru all teams

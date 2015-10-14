@@ -23,6 +23,7 @@
    "activeTab",
    "http://fantasy.premierleague.com/"
    ],
+   "options_page": "options.html",
    "web_accessible_resources": [
     "football16.png"
    ]
