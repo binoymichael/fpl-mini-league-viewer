@@ -78,6 +78,7 @@ var manipulateH2hDom = function() {
   console.log("h2h dom");
 
   $('.ismWrapper').css("width", "1300px");
+  $('.ismWrapper').css("min-height", "1300px");
 
   var clslinks = $('.ismH2HStandingsTable tr td:nth-child(3) a');
   var standingsTableDiv = $('.ismH2HStandingsTable');
@@ -103,13 +104,28 @@ var manipulateH2hDom = function() {
     var awayTeamName = $(matchRow).find('a:last').text();
     var homeTeamId = $(matchRow).find('a:first').attr('href').match(/\d+/)[0];
     var awayTeamId = $(matchRow).find('a:last').attr('href').match(/\d+/)[0];
+
+    $(matchRow).attr('data-popupbox', 'mlh2h-tgw-popup-' + index);
+    $(matchRow).hover(popupShow, popupHide);
+
+
+
     $matchTr = $('<tr class="mlh2h-team-row"><td class="mlh2h-team-box" id="ml-h2h-tgw-'+ homeTeamId +'"></td>' + 
       '<td><table><tr id="h2hmid-tgw-' + homeTeamId + '"></tr>' + 
       '<tr class="mlh2h"><td align="center"><h3>' + homeTeamName + '</h3><h3>vs</h3><h3>' + awayTeamName + '</h3></td></tr>' +
       '<tr id="h2hmid-tgw-' + awayTeamId + '"></tr></table></td>' +
       '<td class="mlh2h-team-box" id="ml-h2h-tgw-' + awayTeamId + '"></td></tr>')
+
+    $matchTrPopUp = $('<tr class="mlh2h-team-row"><td class="mlh2h-team-box" id="ml-h2h-tgw-pop'+ homeTeamId +'"></td>' + 
+      '<td><table><tr id="h2hmid-tgw-pop' + homeTeamId + '"></tr>' + 
+      '<tr class="mlh2h"><td align="center"><h3>' + homeTeamName + '</h3><h3>vs</h3><h3>' + awayTeamName + '</h3></td></tr>' +
+      '<tr id="h2hmid-tgw-pop' + awayTeamId + '"></tr></table></td>' +
+      '<td class="mlh2h-team-box" id="ml-h2h-tgw-pop' + awayTeamId + '"></td></tr>')
+
+    $thisGwH2HPopUpTable = $('<table class="mlPopTeamH2H" id="mlh2h-tgw-popup-' + index +'"></table>');
+    $thisGwH2HPopUpTable.append($matchTrPopUp);
+    $(matchRow).append($thisGwH2HPopUpTable);
     $thisGwH2HMiniLeagueTable.append($matchTr);
-    // console.log(matchRow);
   });
 
   var $thisWeekSpacerdiv = $('<div class="miniLeagueSpacerH2H"><h3 style="display: inline;"><img src="' + chrome.extension.getURL("football16.png") + '"/>  This Week H2H View</h3> | <a id="toggleH2HThisWeekView" href="#">Show</a></div>');
@@ -175,6 +191,7 @@ var loadPreviousTransfers = function(teamId) {
       var $div = $('#mlth' + teamId);
       var $pop = $('#mlth-pop' + teamId);
       var $div2 = $('#mlth-h2h-tgw-' + teamId);
+      var $popdiv2 = $('#mlth-h2h-tgw-pop' + teamId);
       var $div3 = $('#mlth-h2h-ngw-' + teamId);
       $t = $($html.find('table.ismTable')[0]);
       if ($t.find('th:first').text() == 'Date') {
@@ -185,6 +202,7 @@ var loadPreviousTransfers = function(teamId) {
         $div.append($t.clone());
         $pop.append($t.clone())
         $div2.append($t.clone());
+        $popdiv2.append($t.clone());
         $div3.append($t.clone());
       }
     }
@@ -250,19 +268,29 @@ var loadTeamIntoDiv = function(mode, teamId, fullLink) {
         $h2hsection2.html($cup.parent());
 
         var $h2hsection3 = $('<div id="mlth-h2h-tgw-' + teamId + '" class="miniLeagueTransferHistoryH2H"></div>')
+        var $h2hPopSection3 = $('<div id="mlth-h2h-tgw-pop' + teamId + '" class="miniLeagueTransferHistoryH2H"></div>')
+
         var $nextH2hsection3 = $('<div id="mlth-h2h-ngw-' + teamId + '" class="miniLeagueTransferHistoryH2H"></div>')
 
         var $teamTd = $('#ml-h2h-tgw-' + teamId);
+        var $teamTdPop = $('#ml-h2h-tgw-pop' + teamId);
         var $nextTeamTd = $('#ml-h2h-ngw-' + teamId);
         var $midRow = $('#h2hmid-tgw-' + teamId);
+        var $midRowPop = $('#h2hmid-tgw-pop' + teamId);
         var $nextMidRow = $('#h2hmid-ngw-' + teamId);
 
         $teamTd.append($div2.clone());
+        $teamTdPop.append($div2.clone());
+
         $nextTeamTd.append($div2.clone());
 
         $midRow.append($h2hsection2.clone());
         $midRow.append($h2hsection4.clone());
         $midRow.append($h2hsection3.clone());
+
+        $midRowPop.append($h2hsection2.clone());
+        $midRowPop.append($h2hsection4.clone());
+        $midRowPop.append($h2hsection3.clone());
 
         $nextMidRow.append($h2hsection2.clone());
         $nextMidRow.append($h2hsection4.clone());
