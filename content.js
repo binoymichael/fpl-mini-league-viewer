@@ -1,15 +1,11 @@
 console.log('hello from content script');
 var mode = "";
 var rootUrl = "http://fantasy.premierleague.com";
-var moveLeft = 0;
-var moveDown = 0;
 
 var popupShow = function (e) {
     console.log('popup');
     var target = '#' + ($(this).attr('data-popupbox'));
     $(target).show();
-    moveLeft = $(this).outerWidth();
-    moveDown = ($(target).outerHeight() / 2);
 };
 
 var popupHide = function () {
@@ -78,7 +74,7 @@ var manipulateH2hDom = function() {
   console.log("h2h dom");
 
   $('.ismWrapper').css("width", "1300px");
-  $('.ismWrapper').css("min-height", "1300px");
+  $('.ismWrapper').css("min-height", "1600px");
 
   var clslinks = $('.ismH2HStandingsTable tr td:nth-child(3) a');
   var standingsTableDiv = $('.ismH2HStandingsTable');
@@ -143,18 +139,33 @@ var manipulateH2hDom = function() {
     var awayTeamName = $(matchRow).find('a:last').text();
     var homeTeamId = $(matchRow).find('a:first').attr('href').match(/\d+/)[0];
     var awayTeamId = $(matchRow).find('a:last').attr('href').match(/\d+/)[0];
+
+
+    $(matchRow).attr('data-popupbox', 'mlh2h-ngw-popup-' + index);
+    $(matchRow).hover(popupShow, popupHide);
+
     $matchTr = $('<tr class="mlh2h-team-row"><td class="mlh2h-team-box" id="ml-h2h-ngw-'+ homeTeamId +'"></td>' + 
       '<td><table><tr id="h2hmid-ngw-' + homeTeamId + '"></tr>' + 
       '<tr class="mlh2h"><td align="center"><h3>' + homeTeamName + '</h3><h3>vs</h3><h3>' + awayTeamName + '</h3></td></tr>' +
       '<tr id="h2hmid-ngw-' + awayTeamId + '"></tr></table></td>' +
-      '<td class="mlh2h-team-box" id="ml-h2h-ngw-' + awayTeamId + '"></td></tr>')
+      '<td class="mlh2h-team-box" id="ml-h2h-ngw-' + awayTeamId + '"></td></tr>');
+
+    $matchTrPopUp = $('<tr class="mlh2h-team-row"><td class="mlh2h-team-box" id="ml-h2h-ngw-pop'+ homeTeamId +'"></td>' + 
+      '<td><table><tr id="h2hmid-ngw-pop' + homeTeamId + '"></tr>' + 
+      '<tr class="mlh2h"><td align="center"><h3>' + homeTeamName + '</h3><h3>vs</h3><h3>' + awayTeamName + '</h3></td></tr>' +
+      '<tr id="h2hmid-ngw-pop' + awayTeamId + '"></tr></table></td>' +
+      '<td class="mlh2h-team-box" id="ml-h2h-ngw-pop' + awayTeamId + '"></td></tr>')
+
+    $nextGwH2HPopUpTable = $('<table class="mlPopTeamH2H" id="mlh2h-ngw-popup-' + index +'"></table>');
+    $nextGwH2HPopUpTable.append($matchTrPopUp);
+    $(matchRow).append($nextGwH2HPopUpTable);
     $nextGwH2HMiniLeagueTable.append($matchTr);
     // console.log(matchRow);
   });
   $nextGwH2HTable.after($nextGwH2HMiniLeagueTable);
 
 
-  var $nextWeekSpacerdiv = $('<div class="miniLeagueSpacerH2H"><h3 style="display: inline;"><img src="' + chrome.extension.getURL("football16.png") + '"/>  This Week H2H View</h3> | <a id="toggleH2HNextWeekView" href="#">Show</a></div>');
+  var $nextWeekSpacerdiv = $('<div class="miniLeagueSpacerH2H"><h3 style="display: inline;"><img src="' + chrome.extension.getURL("football16.png") + '"/>  Next Week H2H View</h3> | <a id="toggleH2HNextWeekView" href="#">Show</a></div>');
 
   $nextGwH2HTable.after($nextWeekSpacerdiv);
   $nextWeekSpacerdiv.after($nextGwH2HMiniLeagueTable);
@@ -193,6 +204,7 @@ var loadPreviousTransfers = function(teamId) {
       var $div2 = $('#mlth-h2h-tgw-' + teamId);
       var $popdiv2 = $('#mlth-h2h-tgw-pop' + teamId);
       var $div3 = $('#mlth-h2h-ngw-' + teamId);
+      var $popdiv3 = $('#mlth-h2h-ngw-pop' + teamId);
       $t = $($html.find('table.ismTable')[0]);
       if ($t.find('th:first').text() == 'Date') {
         $t.find('th:first').remove();
@@ -204,6 +216,7 @@ var loadPreviousTransfers = function(teamId) {
         $div2.append($t.clone());
         $popdiv2.append($t.clone());
         $div3.append($t.clone());
+        $popdiv3.append($t.clone());
       }
     }
   });
@@ -275,14 +288,19 @@ var loadTeamIntoDiv = function(mode, teamId, fullLink) {
         var $teamTd = $('#ml-h2h-tgw-' + teamId);
         var $teamTdPop = $('#ml-h2h-tgw-pop' + teamId);
         var $nextTeamTd = $('#ml-h2h-ngw-' + teamId);
+        var $nextTeamTdPop = $('#ml-h2h-ngw-pop' + teamId);
+
         var $midRow = $('#h2hmid-tgw-' + teamId);
         var $midRowPop = $('#h2hmid-tgw-pop' + teamId);
+
         var $nextMidRow = $('#h2hmid-ngw-' + teamId);
+        var $nextMidRowPop = $('#h2hmid-ngw-pop' + teamId);
 
         $teamTd.append($div2.clone());
         $teamTdPop.append($div2.clone());
 
         $nextTeamTd.append($div2.clone());
+        $nextTeamTdPop.append($div2.clone());
 
         $midRow.append($h2hsection2.clone());
         $midRow.append($h2hsection4.clone());
@@ -295,7 +313,11 @@ var loadTeamIntoDiv = function(mode, teamId, fullLink) {
         $nextMidRow.append($h2hsection2.clone());
         $nextMidRow.append($h2hsection4.clone());
         $nextMidRow.append($nextH2hsection3.clone());
-      }
+
+        $nextMidRowPop.append($h2hsection2.clone());
+        $nextMidRowPop.append($h2hsection4.clone());
+        $nextMidRowPop.append($nextH2hsection3.clone());
+       }
 
       loadPreviousTransfers(teamId);
     }
@@ -348,6 +370,7 @@ var gwSort = function(e) {
 // TODO: pagination
 var manipulateClassicDom = function() {
   console.log("classic dom");
+  $('.ismWrapper').css("min-height", "800px");
   var clslinks = $('.ismStandingsTable tr td:nth-child(3) a');
   var standingsTableDiv = $('#ism');
 
