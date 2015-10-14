@@ -1,6 +1,38 @@
 console.log('hello from content script');
 var mode = "";
 var rootUrl = "http://fantasy.premierleague.com";
+var moveLeft = 0;
+var moveDown = 0;
+
+var popupShow = function (e) {
+    console.log('popup');
+    var target = '#' + ($(this).attr('data-popupbox'));
+    $(target).show();
+    moveLeft = $(this).outerWidth();
+    moveDown = ($(target).outerHeight() / 2);
+};
+
+var popupHide = function () {
+    console.log('popdown');
+    var target = '#' + ($(this).attr('data-popupbox'));
+    if (!($(this).hasClass("show"))) {
+        $(target).hide();
+    }
+};
+
+var toggleClassicView = function(e) {
+  e.preventDefault();
+  var $this = $(this);
+  if ($this.text() == 'Show') {
+    $this.text('Hide');
+    $('#mlSortControls').show();
+    $('.miniLeagueSection').show();
+  } else {
+    $this.text('Show');
+    $('#mlSortControls').hide();
+    $('.miniLeagueSection').hide();
+  }
+};
 
 var toggleH2HClassicView = function(e) {
   e.preventDefault();
@@ -136,6 +168,7 @@ var loadPreviousTransfers = function(teamId) {
       var $html = $(data);
 
       var $div = $('#mlth' + teamId);
+      var $pop = $('#mlth-pop' + teamId);
       var $div2 = $('#mlth-h2h-tgw-' + teamId);
       var $div3 = $('#mlth-h2h-ngw-' + teamId);
       $t = $($html.find('table.ismTable')[0]);
@@ -145,6 +178,7 @@ var loadPreviousTransfers = function(teamId) {
         $t.find('tr').slice(6).remove()
 
         $div.append($t.clone());
+        $pop.append($t.clone())
         $div2.append($t.clone());
         $div3.append($t.clone());
       }
@@ -185,6 +219,7 @@ var loadTeamIntoDiv = function(mode, teamId, fullLink) {
       $section2.html($cup.parent());
 
       var $section3 = $('<div id="mlth' + teamId + '" class="miniLeagueTransferHistory"></div>')
+      var $popSection3 = $('<div id="mlth-pop' + teamId + '" class="miniLeagueTransferHistory"></div>')
 
       var $div = $('#ml' + teamId);
       $div.attr('data-gwpoints', points);
@@ -192,6 +227,12 @@ var loadTeamIntoDiv = function(mode, teamId, fullLink) {
       $div.append($section2.clone());
       $div.append($section4.clone());
       $div.append($section3.clone());
+
+      var $pop = $('#mlcp' + teamId);
+      $pop.append($section1.clone());
+      $pop.append($section2.clone());
+      $pop.append($section4.clone());
+      $pop.append($popSection3.clone());
 
       if (mode == "H2H") {
         var $div2 = $('<div></div>');
@@ -276,21 +317,37 @@ var manipulateClassicDom = function() {
   console.log("classic dom");
   var clslinks = $('.ismStandingsTable tr td:nth-child(3) a');
   var standingsTableDiv = $('#ism');
+  // var standingsTableTable = $('.ismStandingsTable');
+  // var classicPopoverContainer = $('<div id="#classicPopoverContainer"></div>');
+  // standingsTableTable.before(classicPopoverContainer);
+
   var miniLeagueSection = $('<section class="miniLeagueSection"></section>');
-  var $spacerdiv = $('<div class="miniLeagueSpacer"><h1><img src="' + chrome.extension.getURL("football16.png") + '"/>  Mini League Detailed View</h1><a id="posSortButton" href="#">Sort on Current Standings</a> | <a id="gwSortButton" href="#">Sort on Gameweek Points</a></div>');
+
+  var $spacerdiv = $('<div class="miniLeagueSpacer"><h3 style="display: inline;"><img src="' + chrome.extension.getURL("football16.png") + '"/>  Mini League Detailed View</h3> | <a id="toggleClassicView" href="#">Hide</a> <div id="mlSortControls" style="margin-top:30px"><a id="posSortButton" href="#">Sort on Current Standings</a> | <a id="gwSortButton" href="#">Sort on Gameweek Points</a></div></div>');
   standingsTableDiv.append($spacerdiv);
+
+
+  $('#toggleClassicView').click(toggleClassicView);
   $('#posSortButton').click(posSort);
   $('#gwSortButton').click(gwSort);
+  // $('#mlSortControls').hide();
   standingsTableDiv.append(miniLeagueSection);
 
   $.each(clslinks, function(index, value) {
     var clsLink = $(value).attr('href');
     var teamId = clsLink.match(/\d+/)[0];
+    $(value).attr('data-popupbox', 'mlcp' + teamId);
+    $(value).hover(popupShow, popupHide);
+
     var $div = $('<div class="mlTeamContainer" id="ml' + teamId + '" data-position="'+ index + '"></div>');
+    var $pop = $('<div class="mlPopTeam" id="mlcp' + teamId + '"></div>');
+    $(value).parent().append($pop);
 
     loadTeamIntoDiv("CLS", teamId, rootUrl + clsLink);
     miniLeagueSection.append($div);
   });
+
+  // miniLeagueSection.hide();
 };
 
 var startInlineManipulations = function(mode) {

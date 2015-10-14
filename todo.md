@@ -8,19 +8,12 @@ Order
 <!-- - Ranking order -->
 <!-- - Gameweek order -->
 <!-- More teams
-  - test with more than 50 teams
-  - Next page to take to the next level
- -->
+ -->  - test with more than 50 teams
+  <!-- - Next page to take to the next level -->
+<!-- - H2H view -->
 
-
-
-- H2H view
 - select which teams to display
 
-Stats Page
-  - a stats page with collated information
-  - Get collated stats
-    - other script stats captain, selected by
 
 - Heavy traffic? What happens?
 - Resolution testing
@@ -35,3 +28,16 @@ Stats Page
 #Questions
 - JS closure options
 - Passing a div as a parameter
+
+
+Hide classic table by default
+Mouse popover for teams and h2h
+  - add in h2h classic
+  - add for h2h matches
+
+Stats Page
+  - Selected captains
+  - Run thru all teams
+
+Checkboxes to select only certain teams
+Accordion
